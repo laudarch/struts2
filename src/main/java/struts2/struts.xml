@@ -6,7 +6,7 @@
 <struts>
     <include file="struts-default.xml" />
     <package name="default" extends="struts-default">
-        <action name="vulntest" class="struts2.VulnTestAction">
+        <action name="index" class="struts2.VulnTestAction">
             <result name="success">/index.jsp</result>
         </action>
     </package>

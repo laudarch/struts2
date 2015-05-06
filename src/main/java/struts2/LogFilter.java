@@ -1,7 +1,6 @@
 package struts2;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 
 import javax.servlet.Filter;
@@ -12,41 +11,47 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 public class LogFilter implements Filter {
+
+	private static final Logger logger = Logger.getLogger(LogFilter.class);
 
 	public void destroy() {
 
 	}
 
-	public void doFilter(ServletRequest req, ServletResponse rep, FilterChain chain) throws IOException, ServletException {
-		
+	public void doFilter(final ServletRequest req, final ServletResponse rep,
+			final FilterChain chain) throws IOException, ServletException {
+
 		final HttpServletRequest request = (HttpServletRequest) req;
-		
-		conloseLog(req, request);
-		
-		chain.doFilter(req, rep);
-		
-	}
-	
-	private void conloseLog(ServletRequest req, HttpServletRequest request){
-		
-		System.out.println("URL：" + request.getRequestURI());
-		for (Map.Entry entry : req.getParameterMap().entrySet()) {
-			System.out.println("key：" + entry.getKey());
-			System.out.print("values：");
-			for(String obj : (String[]) entry.getValue()){
-				System.out.println(obj);
-			}
+
+		log(request);
+
+		try {
+			chain.doFilter(req, rep);
+		} catch (Exception e) {
+			// donothing
 		}
-		System.out.println("###########################");
-		
-	}
-	
-	private void fileLog(ServletRequest req, HttpServletRequest request){
-		
+
 	}
 
-	public void init(FilterConfig arg0) throws ServletException {
+	private void log(final HttpServletRequest request) {
+		StringBuilder sb = new StringBuilder(1024);
+		sb.append("URL:").append(request.getRequestURI()).append("\n");
+		for (Map.Entry<String, String[]> entry : request.getParameterMap()
+				.entrySet()) {
+			sb.append("Parameter name:").append(entry.getKey()).append("\n");
+			sb.append("values:");
+			for (String obj : entry.getValue()) {
+				sb.append(obj);
+			}
+			sb.append("\n");
+		}
+		logger.info(sb);
+	}
+
+	public void init(final FilterConfig config) throws ServletException {
 
 	}
 
