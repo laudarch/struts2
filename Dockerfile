@@ -1,10 +1,12 @@
 FROM maven
 
+#COPY ./pom.xml /struts2/pom.xml
+#COPY ./src /struts2/src
 COPY . /struts2
 
-RUN cd /struts2 && mvn jetty:run
+VOLUME  ["/root/.m2"]
 
-VOLUME /tmp/vulntest.log
+WORKDIR /struts2
 
 CMD ["mvn","jetty:run"]
 
