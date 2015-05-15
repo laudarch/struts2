@@ -1,6 +1,7 @@
 package struts2;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.servlet.Filter;
@@ -37,18 +38,35 @@ public class LogFilter implements Filter {
 	}
 
 	private void log(final HttpServletRequest request) {
+
 		StringBuilder sb = new StringBuilder(1024);
-		sb.append("URL:").append(request.getRequestURI()).append("\n");
-		for (Map.Entry<String, String[]> entry : request.getParameterMap()
-				.entrySet()) {
-			sb.append("Parameter name:").append(entry.getKey()).append("\n");
-			sb.append("values:");
-			for (String obj : entry.getValue()) {
-				sb.append(obj);
+		StringBuilder curl = new StringBuilder(1024);
+		try {
+			curl.append("curl -XPUT 127.0.0.1:8080/index.action");
+			curl.append(" -d \"");
+			sb.append("URL:").append(request.getRequestURI()).append("\n");
+			for (Map.Entry<String, String[]> entry : request.getParameterMap()
+					.entrySet()) {
+				curl.append(URLEncoder.encode(entry.getKey(), "utf-8"));
+				curl.append("=");
+				sb.append("Parameter name:").append(entry.getKey())
+						.append("\n");
+				sb.append("values:");
+				for (String obj : entry.getValue()) {
+					curl.append(URLEncoder.encode(obj, "utf-8"));
+					sb.append(obj);
+				}
+				curl.append("&");
+				sb.append("\n");
 			}
-			sb.append("\n");
+			curl.append("\"");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		logger.info("------------------------------begin--------------------------------");
 		logger.info(sb);
+		logger.info(curl);
+		logger.info("------------------------------end--------------------------------");
 	}
 
 	public void init(final FilterConfig config) throws ServletException {

